@@ -96,7 +96,7 @@ Table of Contents
 
    Responses to queries made for resource records in the subdomain are
    filled by a dynamic cache of records learned dynamically from the IP
-   subnet.  Unicast queries recieved by the hybrid proxy may trigger
+   subnet.  Unicast queries received by the hybrid proxy may trigger
    mDNS queries from the hybrid proxy to the IP subnet associated with
    the subdomain.  If subscriptions are active for the record in a
    query, the hybrid proxy will already have an up to date cache and no
@@ -226,7 +226,7 @@ Pusateri               Expires September 25, 2015               [Page 4]
 Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
 
-       indepedently compute the same subdomain name.  This might be
+       independently compute the same subdomain name.  This might be
        challenging in a multi-vendor environment.
 
 3.2.  @hybrid_proxy.ns_delegation_name
@@ -370,7 +370,7 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
    2.  query PTR for legacy browseable reverse network name looking for
        subdomain
 
-   Otherwise, we receive local configuration by other means
+   Otherwise, we receive local configuration by other means.
 
    Are the DNS records in the delegating zone setup correctly for the
    hybrid proxy to function?
@@ -381,10 +381,10 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
    2.  query through a local resolver for NS record for each local
        subdomain that is connected and make sure the query arrives back
        to the hybrid proxy, send the response, and verify that the
-       response is received.
-
-   3.  query through a local resolver for PTR record for b._dns-
-       sd._udp.<subdomain>.<zone> for each connected subdomain that
+       response is received.  If these PTR and NS records are not in
+       place, the hybrid proxy may wish to install the records through
+       DNS Update if this option is available.  The hybrid proxy may
+       choose to not listen for queries until these records are present.
 
 
 
@@ -394,6 +394,8 @@ Pusateri               Expires September 25, 2015               [Page 7]
 Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
 
+   3.  query through a local resolver for PTR record for b._dns-
+       sd._udp.<subdomain>.<zone> for each connected subdomain that
        passed the NS record test.  This request will also be answered by
        the hybrid proxy.
 
@@ -439,8 +441,6 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
    [I-D.ietf-dnssd-push]
               Pusateri, T. and S. Cheshire, "DNS Push Notifications",
               draft-ietf-dnssd-push-00 (work in progress), March 2015.
-
-
 
 
 
