@@ -73,8 +73,8 @@ Table of Contents
      3.6.  @hybrid_proxy.udp_llq_port  . . . . . . . . . . . . . . .   6
      3.7.  @hybrid_proxy.tcp_llq_port  . . . . . . . . . . . . . . .   6
      3.8.  @hybrid_proxy.tcp_push_port . . . . . . . . . . . . . . .   6
-   4.  Client Configuration  . . . . . . . . . . . . . . . . . . . .   6
-     4.1.  @unicast_client.search_domains  . . . . . . . . . . . . .   6
+   4.  Client Configuration  . . . . . . . . . . . . . . . . . . . .   7
+     4.1.  @unicast_client.search_domains  . . . . . . . . . . . . .   7
    5.  Hybrid Proxy Startup  . . . . . . . . . . . . . . . . . . . .   7
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
@@ -195,7 +195,7 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
        extension for PTR address queries is ip6.arpa.  All hybrid
        proxies on the IP subnet will make the same query since the
        network portion is the same for all of them.  The returned name
-       will be subdomain.<zone>, where <zone> is the delegating zone.
+       will be <subdomain>.<zone>, where <zone> is the delegating zone.
        As an example, this could be foo.example.com where example.com is
        the domain name distributed through DHCP or SLAAC and foo is the
        assigned subdomain.  If the hybrid proxy does not know the base
@@ -217,7 +217,7 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
        192.0.2.1/24, the hexadecimal string of the network portion would
        be C0000200.  This string could be prefixed with ASCII characters
        if desired resulting in a subdomain of netc0000200.example.com.
-
+       All hybrid proxies with an interface on the same subnet can
 
 
 
@@ -225,6 +225,9 @@ Pusateri               Expires September 25, 2015               [Page 4]
 
 Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
+
+       indepedently compute the same subdomain name.  This might be
+       challenging in a multi-vendor environment.
 
 3.2.  @hybrid_proxy.ns_delegation_name
 
@@ -247,10 +250,10 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
 3.3.  @hybrid_proxy.ns_delegation_name_address_records
 
-   This configuration item is for each ns_delegation_name
+   This configuration item is for each @hybrid_proxy.ns_delegation_name
 
-   The address records for the @hybrid_proxy.ns_delegation_name must
-   refer to active addresses (IPv4 or IPv6) on the hybrid proxy.
+   The address records must refer to active addresses (IPv4 or IPv6) on
+   the hybrid proxy.
 
 3.4.  Hybrid Proxy Records
 
@@ -271,9 +274,6 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
    [I-D.ietf-dnssd-push] is supported, the hybrid proxy must answer to
    these additional records:
 
-   1.  LLQ over UDP - SRV _dns-llq._udp.<subdomain>.<zone> with target
-       as NS delegation name
-
 
 
 
@@ -281,6 +281,9 @@ Pusateri               Expires September 25, 2015               [Page 5]
 
 Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
+
+   1.  LLQ over UDP - SRV _dns-llq._udp.<subdomain>.<zone> with target
+       as NS delegation name
 
    2.  LLQ over TCP - SRV _dns-llq._tcp.<subdomain>.<zone> with target
        as NS delegation name
@@ -291,7 +294,8 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
    Since there may be multiple LLQ and/or DNS Push SRV records for each
    subdomain (one for each hybrid proxy), each hybrid proxy should
    return all of the SRV records from each hybrid proxy on the IP
-   subnet.
+   subnet.  Otherwise only a subset of SRV records may be cached and
+   load balancing may not be effective.
 
    In order for each hybrid proxy to learn about the other hybrid
    proxy's SRV records, each hybrid proxy should advertise its own SRV
@@ -299,7 +303,7 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
    Because there should only be one SOA record for the delegated
    subdomain, a mechanism is needed to ensure only one hybrid proxy
-   advertises the SOA record for the delegated subdomain.
+   advertises the SOA record for the delegated subdomain.  (TBD)
 
    This satisfies the minimum configuration requirements but it is
    likely that additional parameters will be desired.  Examples include
@@ -323,13 +327,9 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
    Random port, advertised in SRV record, one will be assigned in DPRIVE
    for TLS/TCP
 
-4.  Client Configuration
 
-4.1.  @unicast_client.search_domains
 
-   A unicast client will not necessarily need to know the name or IP
-   address of the hybrid proxy.  It can send unicast queries to the
-   local resolver learned through DHCP or SLAAC.  However, if long-lived
+
 
 
 
@@ -338,6 +338,13 @@ Pusateri               Expires September 25, 2015               [Page 6]
 Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
 
+4.  Client Configuration
+
+4.1.  @unicast_client.search_domains
+
+   A unicast client will not necessarily need to know the name or IP
+   address of the hybrid proxy.  It can send unicast queries to the
+   local resolver learned through DHCP or SLAAC.  However, if long-lived
    queries (LLQ) or DNS Push Notifications are wanted, a direct
    connection from the client to the hybrid proxy is needed.  This will
    require discovery of the name and IP address of a hybrid proxy for
@@ -378,13 +385,6 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
    3.  query through a local resolver for PTR record for b._dns-
        sd._udp.<subdomain>.<zone> for each connected subdomain that
-       passed the NS record test.  This request will also be answered by
-       the hybrid proxy.
-
-   4.  ensure that one and only one hybrid proxy on the IP subnet
-       responds as the SOA for the subdomain.  (TBD)
-
-
 
 
 
@@ -393,6 +393,12 @@ Pusateri               Expires September 25, 2015               [Page 7]
 
 Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
+
+       passed the NS record test.  This request will also be answered by
+       the hybrid proxy.
+
+   4.  ensure that one and only one hybrid proxy on the IP subnet
+       responds as the SOA for the subdomain.  (TBD)
 
    5.  If LLQ is supported over UDP, install _dns-
        llq._udp.<subdomain>.<zone> SRV and advertise _dns-llq._udp.local
@@ -406,10 +412,10 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
        push._tcp.<subdomain>.<zone> SRV and advertise _dns-
        push._tcp.local on IP subnet corresponding to <subdomain>.
 
-   8.  Whether or not you support LLQ or DNS Push, listen for other
-       hybrid proxies on each IP subnet advertising the LLQ and DNS Push
-       records and cache these for future SRV queries that may be
-       forwarded to a hybrid proxy.
+   8.  Whether or not a hybrid proxy supports LLQ or DNS Push, the proxy
+       must listen for other hybrid proxies on each IP subnet
+       advertising the LLQ and DNS Push records and cache these for
+       future SRV queries that may be forwarded to a hybrid proxy.
 
 6.  IANA Considerations
 
@@ -434,12 +440,6 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
               Pusateri, T. and S. Cheshire, "DNS Push Notifications",
               draft-ietf-dnssd-push-00 (work in progress), March 2015.
 
-   [I-D.sekar-dns-llq]
-              Sekar, K., "DNS Long-Lived Queries", draft-sekar-dns-
-              llq-01 (work in progress), August 2006.
-
-
-
 
 
 
@@ -450,6 +450,10 @@ Pusateri               Expires September 25, 2015               [Page 8]
 Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
 
+   [I-D.sekar-dns-llq]
+              Sekar, K., "DNS Long-Lived Queries", draft-sekar-dns-
+              llq-01 (work in progress), August 2006.
+
 Author's Address
 
    Tom Pusateri
@@ -459,10 +463,6 @@ Author's Address
 
    Phone: +1 843 473 7394
    Email: pusateri@bangj.com
-
-
-
-
 
 
 

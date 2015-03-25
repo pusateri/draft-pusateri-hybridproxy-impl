@@ -567,8 +567,8 @@
 
 <ol>
   <li>The subdomain name can be configured manually or distributed by an out of band method.</li>
-  <li>The hybrid proxy can query legacy browse domain PTR records for the network portion of the interface address. Suppose an interface on the hybrid proxy is configured with IP address 192.0.2.1/24. The network portion is 192.0.2.0/24. A query is made for lb._dns-sd._udp.0.2.0.192.in-addr.arpa. For IPv6, the extension for PTR address queries is ip6.arpa. All hybrid proxies on the IP subnet will make the same query since the network portion is the same for all of them. The returned name will be subdomain.&lt;zone&gt;, where &lt;zone&gt; is the delegating zone. As an example, this could be foo.example.com where example.com is the domain name distributed through DHCP or SLAAC and foo is the assigned subdomain. If the hybrid proxy does not know the base domain name or know which domain name from a list of search domains to respond to, the domain name returned from this query can be used as a indicator. The left most label is the subdomain and the remainder is the base domain name or zone. This domain name could be different on each connected IP subnet of a particular hybrid proxy, especially in a multi-tenant environment.</li>
-  <li>The hybrid proxy can use a naming algorithm where each proxy will arrive at the same value using the supplied algorithm. The hybrid proxy will have to learn the zone through another means such as DHCP or SLAAC. No particular algorithm should be mandated but an example of such an algorithm would be to create a hexadecimal string based on the network portion of the interface IP address. For the example above with interface IP address 192.0.2.1/24, the hexadecimal string of the network portion would be C0000200. This string could be prefixed with ASCII characters if desired resulting in a subdomain of netc0000200.example.com.</li>
+  <li>The hybrid proxy can query legacy browse domain PTR records for the network portion of the interface address. Suppose an interface on the hybrid proxy is configured with IP address 192.0.2.1/24. The network portion is 192.0.2.0/24. A query is made for lb._dns-sd._udp.0.2.0.192.in-addr.arpa. For IPv6, the extension for PTR address queries is ip6.arpa. All hybrid proxies on the IP subnet will make the same query since the network portion is the same for all of them. The returned name will be &lt;subdomain&gt;.&lt;zone&gt;, where &lt;zone&gt; is the delegating zone. As an example, this could be foo.example.com where example.com is the domain name distributed through DHCP or SLAAC and foo is the assigned subdomain. If the hybrid proxy does not know the base domain name or know which domain name from a list of search domains to respond to, the domain name returned from this query can be used as a indicator. The left most label is the subdomain and the remainder is the base domain name or zone. This domain name could be different on each connected IP subnet of a particular hybrid proxy, especially in a multi-tenant environment.</li>
+  <li>The hybrid proxy can use a naming algorithm where each proxy will arrive at the same value using the supplied algorithm. The hybrid proxy will have to learn the zone through another means such as DHCP or SLAAC. No particular algorithm should be mandated but an example of such an algorithm would be to create a hexadecimal string based on the network portion of the interface IP address. For the example above with interface IP address 192.0.2.1/24, the hexadecimal string of the network portion would be C0000200. This string could be prefixed with ASCII characters if desired resulting in a subdomain of netc0000200.example.com. All hybrid proxies with an interface on the same subnet can indepedently compute the same subdomain name. This might be challenging in a multi-vendor environment.</li>
 </ol>
 
 <p> </p>
@@ -578,8 +578,8 @@
 <p id="rfc.section.3.2.p.3">The hybrid proxy must know the NS record delegation name and the address for which to listen for queries that are forwarded. Before the delegation server will forward queries to the delegated hybrid proxy for a subdomain, it will query the NS record for the subdomain from the hybrid proxy to ensure it will accept queries for the subdomain.</p>
 <p id="rfc.section.3.2.p.4">In the case of multiple hybrid proxies, the delegating server will have multiple NS record delegations and will select one based on local policy to forward requests to.</p>
 <h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> @hybrid_proxy.ns_delegation_name_address_records</h1>
-<p id="rfc.section.3.3.p.1">This configuration item is for each ns_delegation_name</p>
-<p id="rfc.section.3.3.p.2">The address records for the @hybrid_proxy.ns_delegation_name must refer to active addresses (IPv4 or IPv6) on the hybrid proxy.</p>
+<p id="rfc.section.3.3.p.1">This configuration item is for each @hybrid_proxy.ns_delegation_name</p>
+<p id="rfc.section.3.3.p.2">The address records must refer to active addresses (IPv4 or IPv6) on the hybrid proxy.</p>
 <h1 id="rfc.section.3.4"><a href="#rfc.section.3.4">3.4.</a> Hybrid Proxy Records</h1>
 <p id="rfc.section.3.4.p.1">The hybrid proxy must answer the following resource records when queried:</p>
 <p/>
@@ -601,9 +601,9 @@
 </ol>
 
 <p> </p>
-<p id="rfc.section.3.4.p.5">Since there may be multiple LLQ and/or DNS Push SRV records for each subdomain (one for each hybrid proxy), each hybrid proxy should return all of the SRV records from each hybrid proxy on the IP subnet.</p>
+<p id="rfc.section.3.4.p.5">Since there may be multiple LLQ and/or DNS Push SRV records for each subdomain (one for each hybrid proxy), each hybrid proxy should return all of the SRV records from each hybrid proxy on the IP subnet. Otherwise only a subset of SRV records may be cached and load balancing may not be effective.</p>
 <p id="rfc.section.3.4.p.6">In order for each hybrid proxy to learn about the other hybrid proxy's SRV records, each hybrid proxy should advertise its own SRV records for LLQ and/or DNS Push through mDNS on the shared IP subnet.</p>
-<p id="rfc.section.3.4.p.7">Because there should only be one SOA record for the delegated subdomain, a mechanism is needed to ensure only one hybrid proxy advertises the SOA record for the delegated subdomain.</p>
+<p id="rfc.section.3.4.p.7">Because there should only be one SOA record for the delegated subdomain, a mechanism is needed to ensure only one hybrid proxy advertises the SOA record for the delegated subdomain. (TBD)</p>
 <p id="rfc.section.3.4.p.8">This satisfies the minimum configuration requirements but it is likely that additional parameters will be desired. Examples include the port numbers to listen for mandatory TLS or policy to determine which services get advertised to which unicast clients.</p>
 <h1 id="rfc.section.3.5"><a href="#rfc.section.3.5">3.5.</a> @hybrid_proxy.udp_port</h1>
 <p id="rfc.section.3.5.p.1">Port 53, forwarded to by delegating DNS server</p>
@@ -639,7 +639,7 @@
   <li>If LLQ is supported over UDP, install _dns-llq._udp.&lt;subdomain&gt;.&lt;zone&gt; SRV and advertise _dns-llq._udp.local on IP subnet corresponding to &lt;subdomain&gt;.</li>
   <li>If LLQ is supported over TCP, install _dns-llq._tcp.&lt;subdomain&gt;.&lt;zone&gt; SRV and advertise _dns-llq._tcp.local on IP subnet corresponding to &lt;subdomain&gt;.</li>
   <li>If DNS Push is supported, install _dns-push._tcp.&lt;subdomain&gt;.&lt;zone&gt; SRV and advertise _dns-push._tcp.local on IP subnet corresponding to &lt;subdomain&gt;.</li>
-  <li>Whether or not you support LLQ or DNS Push, listen for other hybrid proxies on each IP subnet advertising the LLQ and DNS Push records and cache these for future SRV queries that may be forwarded to a hybrid proxy.</li>
+  <li>Whether or not a hybrid proxy supports LLQ or DNS Push, the proxy must listen for other hybrid proxies on each IP subnet advertising the LLQ and DNS Push records and cache these for future SRV queries that may be forwarded to a hybrid proxy.</li>
 </ol>
 
 <p> </p>
