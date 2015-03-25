@@ -1,2 +1,2 @@
-# draft-pusateri-hybridproxy-implementation
+# draft-pusateri-hybridproxy-impl
 Implementation Advice for the DNSSD Hybrid Proxy
