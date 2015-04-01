@@ -4,8 +4,8 @@
 
 Internet Engineering Task Force                              T. Pusateri
 Internet-Draft                                       Seeking affiliation
-Intended status: Standards Track                              March 2015
-Expires: September 2, 2015
+Intended status: Standards Track                           April 1, 2015
+Expires: October 3, 2015
 
 
                DNS-SD Hybrid Proxy Implementation Advice
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 2, 2015.
+   This Internet-Draft will expire on October 3, 2015.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Pusateri                Expires September 2, 2015               [Page 1]
+Pusateri                 Expires October 3, 2015                [Page 1]
 
-Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
+Internet-Draft           DNSSD-HybridProxy-Impl               April 2015
 
 
 Table of Contents
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Pusateri                Expires September 2, 2015               [Page 2]
+Pusateri                 Expires October 3, 2015                [Page 2]
 
-Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
+Internet-Draft           DNSSD-HybridProxy-Impl               April 2015
 
 
 2.  Delegating DNS Server
@@ -165,9 +165,9 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
 
 
-Pusateri                Expires September 2, 2015               [Page 3]
+Pusateri                 Expires October 3, 2015                [Page 3]
 
-Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
+Internet-Draft           DNSSD-HybridProxy-Impl               April 2015
 
 
 3.  Hybrid Proxy Configuration
@@ -221,9 +221,9 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
 
 
-Pusateri                Expires September 2, 2015               [Page 4]
+Pusateri                 Expires October 3, 2015                [Page 4]
 
-Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
+Internet-Draft           DNSSD-HybridProxy-Impl               April 2015
 
 
        independently compute the same subdomain name.  This might be
@@ -277,9 +277,9 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
 
 
-Pusateri                Expires September 2, 2015               [Page 5]
+Pusateri                 Expires October 3, 2015                [Page 5]
 
-Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
+Internet-Draft           DNSSD-HybridProxy-Impl               April 2015
 
 
    1.  LLQ over UDP - SRV _dns-llq._udp.<subdomain>.<zone> with target
@@ -333,9 +333,9 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
 
 
-Pusateri                Expires September 2, 2015               [Page 6]
+Pusateri                 Expires October 3, 2015                [Page 6]
 
-Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
+Internet-Draft           DNSSD-HybridProxy-Impl               April 2015
 
 
 4.  Client Configuration
@@ -389,9 +389,9 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
 
 
-Pusateri                Expires September 2, 2015               [Page 7]
+Pusateri                 Expires October 3, 2015                [Page 7]
 
-Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
+Internet-Draft           DNSSD-HybridProxy-Impl               April 2015
 
 
    3.  query through a local resolver for PTR record for b._dns-
@@ -445,9 +445,9 @@ Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
 
 
 
-Pusateri                Expires September 2, 2015               [Page 8]
+Pusateri                 Expires October 3, 2015                [Page 8]
 
-Internet-Draft           DNSSD-HybridProxy-Impl               March 2015
+Internet-Draft           DNSSD-HybridProxy-Impl               April 2015
 
 
    [I-D.sekar-dns-llq]
@@ -501,4 +501,4 @@ Author's Address
 
 
 
-Pusateri                Expires September 2, 2015               [Page 9]
+Pusateri                 Expires October 3, 2015                [Page 9]
