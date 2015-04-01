@@ -111,7 +111,7 @@
      <t>Responses to queries made for resource records in the subdomain are filled by a dynamic cache of records learned dynamically from the IP subnet. Unicast queries received by the hybrid proxy may trigger mDNS queries from the hybrid proxy to the IP subnet associated with the subdomain. If subscriptions are active for the record in a query, the hybrid proxy will already have an up to date cache and no mDNS queries are triggered.</t> 
    </section>
    <section title="Delegating DNS Server">
-     <t>The delegating DNS server requires configuration of the subdomain delegations and the browse PTR records for each subdomain. All configuration parameters are proceeded by '@' for easy identification.</t>
+     <t>The delegating DNS server requires configuration of the subdomain delegations and the browse PTR records for each subdomain. All configuration parameters are in the form '@entity.parameter' for easy identification.</t>
      <section title="@delegating_server.subdomain_ns">
        <t>This configuration item is for each hybrid proxy on each subdomain.</t>
 

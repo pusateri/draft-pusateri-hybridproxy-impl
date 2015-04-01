@@ -403,7 +403,7 @@
 
   <meta name="dct.creator" content="Pusateri, T." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-pusateri-hybridproxy-impl" />
-  <meta name="dct.issued" scheme="ISO8601" content="2015-3-24" />
+  <meta name="dct.issued" scheme="ISO8601" content="2015-3" />
   <meta name="dct.abstract" content="This document provides advice on the implementation of a DNS Service Discovery Hybrid Proxy Server. It describes the configuration parameters at the delegating DNS server, the hybrid proxy itself, and the client. It also describes the resource records required of the delegating DNS server and the hybrid proxy." />
   <meta name="description" content="This document provides advice on the implementation of a DNS Service Discovery Hybrid Proxy Server. It describes the configuration parameters at the delegating DNS server, the hybrid proxy itself, and the client. It also describes the resource records required of the delegating DNS server and the hybrid proxy." />
 
@@ -424,10 +424,10 @@
 </tr>
 <tr>
   <td class="left">Intended status: Standards Track</td>
-  <td class="right">March 24, 2015</td>
+  <td class="right">March 2015</td>
 </tr>
 <tr>
-  <td class="left">Expires: September 25, 2015</td>
+  <td class="left">Expires: September 2, 2015</td>
   <td class="right"></td>
 </tr>
 
@@ -448,7 +448,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on September 25, 2015.</p>
+<p>This Internet-Draft will expire on September 2, 2015.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -490,7 +490,7 @@
 <p id="rfc.section.1.p.1">A hybrid proxy <a href="#I-D.ietf-dnssd-hybrid">[I-D.ietf-dnssd-hybrid]</a> dynamically maps between the multicast DNS link-local infrastructure and the wide-area unicast DNS infrastructure. Externally, it looks like a standard unicast DNS server. Internally, instead of static resource records, it builds a cache of resource records that it learns dynamically on an interface where mDNS is used. These resource records are mapped to a location in the unicast DNS hierarchy by associating a subdomain with each IP subnet.</p>
 <p id="rfc.section.1.p.2">Responses to queries made for resource records in the subdomain are filled by a dynamic cache of records learned dynamically from the IP subnet. Unicast queries received by the hybrid proxy may trigger mDNS queries from the hybrid proxy to the IP subnet associated with the subdomain. If subscriptions are active for the record in a query, the hybrid proxy will already have an up to date cache and no mDNS queries are triggered.</p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> Delegating DNS Server</h1>
-<p id="rfc.section.2.p.1">The delegating DNS server requires configuration of the subdomain delegations and the browse PTR records for each subdomain. All configuration parameters are proceeded by '@' for easy identification.</p>
+<p id="rfc.section.2.p.1">The delegating DNS server requires configuration of the subdomain delegations and the browse PTR records for each subdomain. All configuration parameters are in the form '@entity.parameter' for easy identification.</p>
 <h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> @delegating_server.subdomain_ns</h1>
 <p id="rfc.section.2.1.p.1">This configuration item is for each hybrid proxy on each subdomain.</p>
 <p id="rfc.section.2.1.p.2">The delegating DNS server will have NS records for each hybrid proxy for the subdomain on each IP subnet it is connected. There maybe multiple NS records for the same subdomain for each hybrid proxy.</p>
