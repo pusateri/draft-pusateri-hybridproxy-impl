@@ -9,7 +9,7 @@ Expires: September 2, 2015
 
 
                DNS-SD Hybrid Proxy Implementation Advice
-                    draft-pusateri-hybridproxy-impl
+                   draft-pusateri-hybridproxy-impl-00
 
 Abstract
 
